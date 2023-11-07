@@ -1,0 +1,33 @@
+
+ 
+
+.form-container {
+  background-color: rgba(4, 63, 90, 0.945);
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(158, 226, 217, 0.897);
+  padding: 20px;
+  margin: 20px auto;
+  width: 50%;
+  height: 640px;
+
+}
+
+.label-text {
+  display: block;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.label-text label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent; 
+  padding: 5px; 
+  border-radius: 5px; 
+}
+.center {
+  display: flex;
+  justify-content: 'center';
+  align-items: 'center';
+}
