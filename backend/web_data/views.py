@@ -18,9 +18,18 @@ class WebData_detail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = WebDataSerializer'''
 
 class MyWebData(APIView):
+    serializer_class = WebDataSerializer
     def get(self,request):
+       #serializers_class = WebDataSerializer
+       all_data = WebData.objects.all().values()
+       response ={
+            "message":"all data fetched succesfully",
+            "data":all_data
+            }
+       return Response(data=response)
+    
        
-        mydata ={
+       ''' mydata ={
     "input": [
         {
             "label": "Username",
@@ -59,27 +68,29 @@ class MyWebData(APIView):
             ]
         }
     ]
-}
-        return Response(mydata,status=status.HTTP_200_OK)
+}'''
+        
     
 
     def post(self,request):
-        serializer = WebDataSerializer(data = request.data)
-        print(serializer)
-      
-        if serializer.is_valid():
-            User.objects.create_user(
-                username=serializer.validated_data['username'],
-                first_name=serializer.validated_data['first_name'],
-                last_name=serializer.validated_data['last_name'],
-                email_id=serializer.validated_data['email_id'],
-                phone_number=serializer.validated_data['phone_number'],
-                gender=serializer.validated_data['gender']
-
-            )
+            serializer = WebDataSerializer(data=request.data)
+            if serializer.is_valid():
+                 
+                WebData.objects.create(username=serializer.data.get("username"),
+                                   first_name=serializer.data.get("first_name"),
+                                   last_name=serializer.data.get("last_name"),
+                                   email_id=serializer.data.get("email_id"),
+                                   phone_number=serializer.data.get("phone_number"),
+                                   gender=serializer.data.get("gender")
+                                   )
+                newdata=WebData.objects.all().filter(username=request.data["username"]).values()
+                response1= {
+                 "messages":"all data added succesfully",
+                 "newdata":newdata
+            }
             
-            return Response({"message":"user registered successfully"},status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=response1,status=status.HTTP_201_CREATED)
+        
 
 
 

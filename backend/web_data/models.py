@@ -6,8 +6,10 @@ class WebData(models.Model):
     username = models.CharField(max_length=50)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email_id = models.EmailField()
+    email_id = models.EmailField(blank = True)
     phone_number = models.IntegerField()
+    gender = models.CharField(max_length=20)
+
     # MALE = "male"
     # FEMALE = "female"
     # OTHER = "other"
@@ -19,8 +21,7 @@ class WebData(models.Model):
     #          ("OTHER","other"),
              
      #        ]
-    gender = models.CharField(max_length=20)
-
+    
 
     def __str__(self):
         return self.username
