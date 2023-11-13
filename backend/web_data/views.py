@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 
 from .models import WebData
 from rest_framework import generics,viewsets,routers,status
@@ -90,7 +91,36 @@ class MyWebData(APIView):
             }
             
             return Response(data=response1,status=status.HTTP_201_CREATED)
+    
+class MyWebData_Detail(APIView):
+    def get_object(self, pk): 
+        # Returns an object instance that should  be used for detail views. 
+        
+        try: 
+            return WebData.objects.get(pk=pk) 
+        except WebData.DoesNotExist: 
+            raise Http404 
+
+    def get(self,request,pk,format=None):
+         webdata=self.get_object(pk)
+         serializer_obj =WebDataSerializer(webdata)
+         return Response(serializer_obj.data)
+    
+
+    def put(self,request,pk,format=None):
+         webdata = self.get_object(pk)
+         serializer_obj =WebDataSerializer(webdata,data=request.data)
+         if serializer_obj.is_valid():
+              serializer_obj.save()
+              return Response(serializer_obj.data)
+         return Response(serializer_obj.errors,status=status.HTTP_400_BAD_REQUEST)
         
 
-
-
+    
+    def delete(self,request,pk,format=None):
+        instance = self.get_object(pk)
+        instance.delete()
+        return Response({"message":"data is deleted succesfully"},status=status.HTTP_204_NO_CONTENT)
+    
+        
+        
